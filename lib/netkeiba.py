@@ -8,6 +8,9 @@ from dataclasses import dataclass
 from typing import Optional
 
 
+MAX_RETRY = 10
+
+
 @dataclass(frozen=True)
 class HorseInfo:
     id: int
@@ -62,7 +65,7 @@ class Netkeiba:
     def __init__(self, timeout=5000):
         self.timeout = timeout
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def get_all_shutuba_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
 
@@ -80,7 +83,7 @@ class Netkeiba:
 
         return all_races
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def get_all_result_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
 
@@ -98,7 +101,7 @@ class Netkeiba:
 
         return all_races
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def get_horse_info(self, horse_id: str) -> HorseInfo:
         horse_url = f"https://db.sp.netkeiba.com/horse/{horse_id}"
 
@@ -167,7 +170,7 @@ class Netkeiba:
             prize = int(prize_text.replace("万円", "").replace(",", ""))
         return prize
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def query_horse_by_mare(self, mare_name: str, under_age: int = 2, over_age: int = 3) -> list[HorseQueryResult]:
         query_results = []
         with sync_playwright() as p:
@@ -191,7 +194,7 @@ class Netkeiba:
             browser.close()
         return query_results
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def _get_kaisai_list(self) -> list[str]:
         with sync_playwright() as p:
             browser = p.chromium.launch()
@@ -221,7 +224,7 @@ class Netkeiba:
         return list(filter(lambda x: from_as_number <= extract_date(x) <= to_as_number, urls))
 
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def _get_race_list(self, race_list_url: str, page_type: str = "shutuba") -> list[str]:
         assert page_type in ("shutuba", "result")
         with sync_playwright() as p:
@@ -244,7 +247,7 @@ class Netkeiba:
         race_urls = ["https://race.netkeiba.com/" + url.lstrip("../") for url in race_urls]
         return race_urls
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def _get_shutuba_info(self, race_url: str) -> Race:
         horses = []
 
@@ -278,7 +281,7 @@ class Netkeiba:
         race = Race(race_info, horses)
         return race
 
-    @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def _get_result_info(self, race_url: str) -> Race:
         horses = []
 
