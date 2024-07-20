@@ -59,8 +59,8 @@ class Race:
 
 
 class Netkeiba:
-    def __init__(self):
-        pass
+    def __init__(self, timeout=5000):
+        self.timeout = timeout
 
     @retry(stop=stop_after_attempt(10), retry=retry_if_exception_type(TimeoutError))
     def get_all_shutuba_info(self) -> list[Race]:
@@ -106,7 +106,7 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
-            page.goto(horse_url, timeout=5000)
+            page.goto(horse_url, timeout=self.timeout)
 
             name = page.locator("div.Name > h1").text_content().strip()
             sire = page.locator("table#DetailTable > tbody > tr > td.Sire").text_content().strip()
@@ -177,7 +177,7 @@ class Netkeiba:
 
             encoded_name = urllib.parse.quote(mare_name, encoding="euc-jp")
             query_url = f"https://db.sp.netkeiba.com/?pid=horse_list&word=&match=partial_match&mare={encoded_name}&under_age={under_age}&over_age={over_age}&sort=birthyear&submit="
-            page.goto(query_url, timeout=5000)
+            page.goto(query_url, timeout=self.timeout)
 
             loc_links = page.locator("ul.BreederList > li > a")
             for i in range(loc_links.count()):
@@ -197,7 +197,7 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
-            page.goto('https://race.netkeiba.com/top/race_list.html', timeout=5000)
+            page.goto('https://race.netkeiba.com/top/race_list.html', timeout=self.timeout)
 
             kaisai_links = page.locator('a.ui-tabs-anchor')
             kaisai_urls = []
@@ -228,7 +228,7 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
-            page.goto(race_list_url, timeout=5000)
+            page.goto(race_list_url, timeout=self.timeout)
 
             race_links = page.locator('li.RaceList_DataItem > a')
             race_urls = []
@@ -252,7 +252,7 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
-            page.goto(race_url, timeout=5000)
+            page.goto(race_url, timeout=self.timeout)
 
             race_no = page.locator('div.RaceList_Item01').text_content().strip()
             race_name = page.locator('h1.RaceName').text_content().strip()
@@ -286,7 +286,7 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
-            page.goto(race_url, timeout=5000)
+            page.goto(race_url, timeout=self.timeout)
 
             race_no = page.locator("span.RaceNum").text_content().strip()
             race_name = page.locator("h1.RaceName").text_content().strip()
