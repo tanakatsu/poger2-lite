@@ -1,0 +1,8 @@
+__pycache__
+.DS_Store
+*.csv
+*.pkl
+gmail_config.yml
+.envrc
+environment.yml
+

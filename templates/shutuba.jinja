@@ -1,0 +1,17 @@
+#####################################################################
+出走馬一覧
+#####################################################################
+
+{%- for owner_name, owner_entries in all_owner_entries %}
+■ {{owner_name}} オーナー
+    {% if owner_entries | length == 0 %}
+    今週の出走はありません
+    {% else %}
+        {%- for entry in owner_entries %}
+    {{entry['horse'].name}}  {{entry['info'].kaisai_no}}{{entry['info'].course}}{{entry['info'].kaisai_day}}{{entry['info'].race_no}} {{entry['info'].name}} {{entry['info'].distance}} ({{entry['horse'].jockey}})
+        {%- endfor %}
+    {% endif %}
+{%- endfor %}
+
+#####################################################################
+POG集計プログラム (poger2_lite)
