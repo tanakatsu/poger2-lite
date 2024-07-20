@@ -62,8 +62,9 @@ class Race:
 
 
 class Netkeiba:
-    def __init__(self, timeout=5000):
+    def __init__(self, timeout=5000, block_images=False):
         self.timeout = timeout
+        self.block_images = block_images
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def get_all_shutuba_info(self) -> list[Race]:
@@ -110,6 +111,11 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
+            if self.block_images:
+                page.route("**/*", lambda route: route.abort()
+                           if route.request.resource_type == "image"
+                           else route.continue_()
+                           )
             page.goto(horse_url, timeout=self.timeout)
 
             if html_save_path:
@@ -188,6 +194,11 @@ class Netkeiba:
 
             encoded_name = urllib.parse.quote(mare_name, encoding="euc-jp")
             query_url = f"https://db.sp.netkeiba.com/?pid=horse_list&word=&match=partial_match&mare={encoded_name}&under_age={under_age}&over_age={over_age}&sort=birthyear&submit="
+            if self.block_images:
+                page.route("**/*", lambda route: route.abort()
+                           if route.request.resource_type == "image"
+                           else route.continue_()
+                           )
             page.goto(query_url, timeout=self.timeout)
 
             if html_save_path:
@@ -214,6 +225,11 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
+            if self.block_images:
+                page.route("**/*", lambda route: route.abort()
+                           if route.request.resource_type == "image"
+                           else route.continue_()
+                           )
             page.goto('https://race.netkeiba.com/top/race_list.html', timeout=self.timeout)
 
             if html_save_path:
@@ -251,6 +267,11 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
+            if self.block_images:
+                page.route("**/*", lambda route: route.abort()
+                           if route.request.resource_type == "image"
+                           else route.continue_()
+                           )
             page.goto(race_list_url, timeout=self.timeout)
 
             if html_save_path:
@@ -282,6 +303,11 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
+            if self.block_images:
+                page.route("**/*", lambda route: route.abort()
+                           if route.request.resource_type == "image"
+                           else route.continue_()
+                           )
             page.goto(race_url, timeout=self.timeout)
 
             if html_save_path:
@@ -323,6 +349,11 @@ class Netkeiba:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
+            if self.block_images:
+                page.route("**/*", lambda route: route.abort()
+                           if route.request.resource_type == "image"
+                           else route.continue_()
+                           )
             page.goto(race_url, timeout=self.timeout)
 
             if html_save_path:
