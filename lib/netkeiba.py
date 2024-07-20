@@ -223,7 +223,6 @@ class Netkeiba:
 
         return list(filter(lambda x: from_as_number <= extract_date(x) <= to_as_number, urls))
 
-
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def _get_race_list(self, race_list_url: str, page_type: str = "shutuba") -> list[str]:
         assert page_type in ("shutuba", "result")
