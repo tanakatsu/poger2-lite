@@ -102,7 +102,8 @@ class Netkeiba:
         return all_races
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
-    def get_horse_info(self, horse_id: str) -> HorseInfo:
+    def get_horse_info(self, horse_id: str,
+                       html_save_path: str = None, png_save_path: str = None) -> HorseInfo:
         horse_url = f"https://db.sp.netkeiba.com/horse/{horse_id}"
 
         with sync_playwright() as p:
@@ -110,6 +111,12 @@ class Netkeiba:
             context = browser.new_context()
             page = context.new_page()
             page.goto(horse_url, timeout=self.timeout)
+
+            if html_save_path:
+                with open(html_save_path, "w") as f:
+                    f.write(page.content())
+            if png_save_path:
+                page.screenshot(path=png_save_path)
 
             name = page.locator("div.Name > h1").text_content().strip()
             sire = page.locator("table#DetailTable > tbody > tr > td.Sire").text_content().strip()
@@ -171,7 +178,8 @@ class Netkeiba:
         return prize
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
-    def query_horse_by_mare(self, mare_name: str, under_age: int = 2, over_age: int = 3) -> list[HorseQueryResult]:
+    def query_horse_by_mare(self, mare_name: str, under_age: int = 2, over_age: int = 3,
+                            html_save_path: str = None, png_save_path: str = None) -> list[HorseQueryResult]:
         query_results = []
         with sync_playwright() as p:
             browser = p.chromium.launch()
@@ -181,6 +189,12 @@ class Netkeiba:
             encoded_name = urllib.parse.quote(mare_name, encoding="euc-jp")
             query_url = f"https://db.sp.netkeiba.com/?pid=horse_list&word=&match=partial_match&mare={encoded_name}&under_age={under_age}&over_age={over_age}&sort=birthyear&submit="
             page.goto(query_url, timeout=self.timeout)
+
+            if html_save_path:
+                with open(html_save_path, "w") as f:
+                    f.write(page.content())
+            if png_save_path:
+                page.screenshot(path=png_save_path)
 
             loc_links = page.locator("ul.BreederList > li > a")
             for i in range(loc_links.count()):
@@ -195,12 +209,18 @@ class Netkeiba:
         return query_results
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
-    def _get_kaisai_list(self) -> list[str]:
+    def _get_kaisai_list(self, html_save_path: str = None, png_save_path: str = None) -> list[str]:
         with sync_playwright() as p:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
             page.goto('https://race.netkeiba.com/top/race_list.html', timeout=self.timeout)
+
+            if html_save_path:
+                with open(html_save_path, "w") as f:
+                    f.write(page.content())
+            if png_save_path:
+                page.screenshot(path=png_save_path)
 
             kaisai_links = page.locator('a.ui-tabs-anchor')
             kaisai_urls = []
@@ -224,13 +244,20 @@ class Netkeiba:
         return list(filter(lambda x: from_as_number <= extract_date(x) <= to_as_number, urls))
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
-    def _get_race_list(self, race_list_url: str, page_type: str = "shutuba") -> list[str]:
+    def _get_race_list(self, race_list_url: str, page_type: str = "shutuba",
+                       html_save_path: str = None, png_save_path: str = None) -> list[str]:
         assert page_type in ("shutuba", "result")
         with sync_playwright() as p:
             browser = p.chromium.launch()
             context = browser.new_context()
             page = context.new_page()
             page.goto(race_list_url, timeout=self.timeout)
+
+            if html_save_path:
+                with open(html_save_path, "w") as f:
+                    f.write(page.content())
+            if png_save_path:
+                page.screenshot(path=png_save_path)
 
             race_links = page.locator('li.RaceList_DataItem > a')
             race_urls = []
@@ -247,7 +274,8 @@ class Netkeiba:
         return race_urls
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
-    def _get_shutuba_info(self, race_url: str) -> Race:
+    def _get_shutuba_info(self, race_url: str,
+                          html_save_path: str = None, png_save_path: str = None) -> Race:
         horses = []
 
         with sync_playwright() as p:
@@ -255,6 +283,12 @@ class Netkeiba:
             context = browser.new_context()
             page = context.new_page()
             page.goto(race_url, timeout=self.timeout)
+
+            if html_save_path:
+                with open(html_save_path, "w") as f:
+                    f.write(page.content())
+            if png_save_path:
+                page.screenshot(path=png_save_path)
 
             race_no = page.locator('div.RaceList_Item01').text_content().strip()
             race_name = page.locator('h1.RaceName').text_content().strip()
@@ -281,7 +315,8 @@ class Netkeiba:
         return race
 
     @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
-    def _get_result_info(self, race_url: str) -> Race:
+    def _get_result_info(self, race_url: str,
+                         html_save_path: str = None, png_save_path: str = None) -> Race:
         horses = []
 
         with sync_playwright() as p:
@@ -289,6 +324,12 @@ class Netkeiba:
             context = browser.new_context()
             page = context.new_page()
             page.goto(race_url, timeout=self.timeout)
+
+            if html_save_path:
+                with open(html_save_path, "w") as f:
+                    f.write(page.content())
+            if png_save_path:
+                page.screenshot(path=png_save_path)
 
             race_no = page.locator("span.RaceNum").text_content().strip()
             race_name = page.locator("h1.RaceName").text_content().strip()
