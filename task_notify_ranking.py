@@ -1,6 +1,7 @@
 import pandas as pd
 import jinja2
 import yaml
+import time
 from pathlib import Path
 from constants import DATA_DIR
 from lib.gmail import Gmail
@@ -18,6 +19,7 @@ def format_race_records(row):
 
 
 def main():
+    start_time = time.time()
     file_system_loader = jinja2.FileSystemLoader(searchpath="templates")
     env = jinja2.Environment(loader=file_system_loader)
     template = env.get_template("ranking.jinja")
@@ -52,6 +54,9 @@ def main():
         app_password = config["app_password"]
         gmail = Gmail(login_addr, app_password)
         gmail.send(to_addr, subject, body)
+
+    elapsed_time = time.time() - start_time
+    print(f"{elapsed_time} sec")
 
 
 if __name__ == "__main__":

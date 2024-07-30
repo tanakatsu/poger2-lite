@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from lib.netkeiba import Netkeiba
@@ -13,6 +14,7 @@ def create_backup_version() -> str:
 
 
 def main():
+    start_time = time.time()
     nkb_client = Netkeiba()
     Path(BACKUP_DIR).mkdir(exist_ok=True)
 
@@ -50,6 +52,9 @@ def main():
             backup_filename = group_file.name.replace(".csv", f".{version}.csv")
             df_orig.to_csv(Path(BACKUP_DIR) / backup_filename, index=False)
             df.to_csv(group_file, index=False)
+
+    elapsed_time = time.time() - start_time
+    print(f"{elapsed_time} sec")
 
 
 if __name__ == "__main__":
