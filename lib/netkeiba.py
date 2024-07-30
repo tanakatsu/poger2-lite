@@ -121,7 +121,9 @@ class Netkeiba:
                            if route.request.resource_type == "image"
                            else route.continue_()
                            )
-            page.goto(horse_url, timeout=self.timeout)
+            page.goto(horse_url,
+                      timeout=self.timeout,
+                      wait_until="domcontentloaded")
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
@@ -206,7 +208,9 @@ class Netkeiba:
                            if route.request.resource_type == "image"
                            else route.continue_()
                            )
-            page.goto(query_url, timeout=self.timeout)
+            page.goto(query_url,
+                      timeout=self.timeout,
+                      wait_until="domcontentloaded")
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
@@ -239,7 +243,8 @@ class Netkeiba:
                            if route.request.resource_type == "image"
                            else route.continue_()
                            )
-            page.goto('https://race.netkeiba.com/top/race_list.html', timeout=self.timeout)
+            page.goto('https://race.netkeiba.com/top/race_list.html',
+                      timeout=self.timeout)
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
@@ -283,7 +288,9 @@ class Netkeiba:
                            if route.request.resource_type == "image"
                            else route.continue_()
                            )
-            page.goto(race_list_url, timeout=self.timeout)
+            page.goto(race_list_url,
+                      timeout=self.timeout,
+                      wait_until="domcontentloaded")
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
@@ -321,7 +328,9 @@ class Netkeiba:
                            if route.request.resource_type == "image"
                            else route.continue_()
                            )
-            page.goto(race_url, timeout=self.timeout)
+            page.goto(race_url,
+                      timeout=self.timeout,
+                      wait_until="domcontentloaded")
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
@@ -369,7 +378,9 @@ class Netkeiba:
                            if route.request.resource_type == "image"
                            else route.continue_()
                            )
-            page.goto(race_url, timeout=self.timeout)
+            page.goto(race_url,
+                      timeout=self.timeout,
+                      wait_until="domcontentloaded")
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
