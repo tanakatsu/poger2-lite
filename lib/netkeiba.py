@@ -69,11 +69,13 @@ class Netkeiba:
 
     def get_all_shutuba_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
+        print(kaisai_list)
 
         all_race_urls = []
         for kaisai_url in kaisai_list:
             race_urls = self._get_race_list(kaisai_url, page_type="shutuba")
             all_race_urls.extend(race_urls)
+        print(f"{len(all_race_urls)} race urls")
 
         all_races = []
         for race_url in all_race_urls:
@@ -86,11 +88,13 @@ class Netkeiba:
 
     def get_all_result_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
+        print(kaisai_list)
 
         all_race_urls = []
         for kaisai_url in kaisai_list:
             race_urls = self._get_race_list(kaisai_url, page_type="result")
             all_race_urls.extend(race_urls)
+        print(f"{len(all_race_urls)} race urls")
 
         all_races = []
         for race_url in all_race_urls:
