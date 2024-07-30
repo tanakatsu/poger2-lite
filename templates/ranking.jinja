@@ -16,7 +16,7 @@
 ### {{df_sorted_owner_rank.loc[loop.index - 1].owner_name}}  ({{df_sorted_owner_rank.loc[loop.index - 1].race_records}})
 馬名                      成   績      収得賞金    厩  舎
 {% for j, r in df_owner.iterrows() -%}
-{{ "%-12s" | format(r['name']) }} {{r.sex}} {{ "%-8s" | format(r.prize) }} {{r.trainer}}({{r.stable_location}})
+{{ "%-12s" | format(r['name']) }} {{r.sex}} {{r.place_1st}}-{{r.place_2nd}}-{{r.place_3rd}}-{{r.place_others}}    {{ "%-8d" | format(r.prize) }} {{r.trainer}}({{r.stable_location}})
 {% endfor -%}
 {% endfor %}
 
