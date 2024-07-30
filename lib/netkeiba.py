@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 from playwright._impl._errors import TimeoutError
-from tenacity import retry, stop_after_attempt, retry_if_exception_type
+from tenacity import retry, stop_after_attempt, retry_if_exception_type, wait_random_exponential
 import urllib.parse
 import re
 from datetime import date, timedelta
@@ -9,6 +9,7 @@ from typing import Optional
 
 
 MAX_RETRY = 10
+MAX_WAIT = 4
 
 
 @dataclass(frozen=True)
@@ -66,7 +67,6 @@ class Netkeiba:
         self.timeout = timeout
         self.block_images = block_images
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def get_all_shutuba_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
 
@@ -84,7 +84,6 @@ class Netkeiba:
 
         return all_races
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
     def get_all_result_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
 
@@ -102,7 +101,9 @@ class Netkeiba:
 
         return all_races
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY),
+           retry=retry_if_exception_type(TimeoutError),
+           wait=wait_random_exponential(multiplier=1, max=MAX_WAIT))
     def get_horse_info(self, horse_id: str,
                        html_save_path: str = None, png_save_path: str = None) -> HorseInfo:
         horse_url = f"https://db.sp.netkeiba.com/horse/{horse_id}"
@@ -183,7 +184,9 @@ class Netkeiba:
             prize = int(prize_text.replace("万円", "").replace(",", ""))
         return prize
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY),
+           retry=retry_if_exception_type(TimeoutError),
+           wait=wait_random_exponential(multiplier=1, max=MAX_WAIT))
     def query_horse_by_mare(self, mare_name: str, under_age: int = 2, over_age: int = 3,
                             html_save_path: str = None, png_save_path: str = None) -> list[HorseQueryResult]:
         query_results = []
@@ -219,7 +222,9 @@ class Netkeiba:
             browser.close()
         return query_results
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY),
+           retry=retry_if_exception_type(TimeoutError),
+           wait=wait_random_exponential(multiplier=1, max=MAX_WAIT))
     def _get_kaisai_list(self, html_save_path: str = None, png_save_path: str = None) -> list[str]:
         with sync_playwright() as p:
             browser = p.chromium.launch()
@@ -259,7 +264,9 @@ class Netkeiba:
 
         return list(filter(lambda x: from_as_number <= extract_date(x) <= to_as_number, urls))
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY),
+           retry=retry_if_exception_type(TimeoutError),
+           wait=wait_random_exponential(multiplier=1, max=MAX_WAIT))
     def _get_race_list(self, race_list_url: str, page_type: str = "shutuba",
                        html_save_path: str = None, png_save_path: str = None) -> list[str]:
         assert page_type in ("shutuba", "result")
@@ -294,7 +301,9 @@ class Netkeiba:
         race_urls = ["https://race.netkeiba.com/" + url.lstrip("../") for url in race_urls]
         return race_urls
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY),
+           retry=retry_if_exception_type(TimeoutError),
+           wait=wait_random_exponential(multiplier=1, max=MAX_WAIT))
     def _get_shutuba_info(self, race_url: str,
                           html_save_path: str = None, png_save_path: str = None) -> Race:
         horses = []
@@ -340,7 +349,9 @@ class Netkeiba:
         race = Race(race_info, horses)
         return race
 
-    @retry(stop=stop_after_attempt(MAX_RETRY), retry=retry_if_exception_type(TimeoutError))
+    @retry(stop=stop_after_attempt(MAX_RETRY),
+           retry=retry_if_exception_type(TimeoutError),
+           wait=wait_random_exponential(multiplier=1, max=MAX_WAIT))
     def _get_result_info(self, race_url: str,
                          html_save_path: str = None, png_save_path: str = None) -> Race:
         horses = []
