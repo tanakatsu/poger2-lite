@@ -2,7 +2,7 @@ import pandas as pd
 import re
 from datetime import datetime
 from pathlib import Path
-from netkeiba import Netkeiba
+from lib.netkeiba import Netkeiba
 from constants import DATA_DIR, BACKUP_DIR
 
 
