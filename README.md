@@ -4,7 +4,7 @@ This is a simple tool for [POG](https://ja.wikipedia.org/wiki/%E3%83%9A%E3%83%BC
 
 This application can
 - calculate all paper owner's total prizes
-- notify rankings via mail
+- notify owner rankings in your group via mail
 - notify race entry information via mail
 - notify race result information via mail
 
