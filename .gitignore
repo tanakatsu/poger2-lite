@@ -5,4 +5,5 @@ __pycache__
 gmail_config.yml
 .envrc
 environment.yml
+!sample_data_2024.csv
 
