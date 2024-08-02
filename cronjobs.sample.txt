@@ -1,0 +1,3 @@
+15 16 * * 1 cd /path/to/poger2-lite && PYTHON_BIN=venv/bin/python ./result.sh > log/result.log 2>&1
+15 16 * * 2 cd /path/to/poger2-lite && PYTHON_BIN=venv/bin/python ./update.sh > log/update.log 2>&1
+15 16 * * 5 cd /path/to/poger2-lite && PYTHON_BIN=venv/bin/python ./shutuba.sh > log/shutuba.log 2>&1
