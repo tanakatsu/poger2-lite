@@ -2,8 +2,11 @@ __pycache__
 .DS_Store
 *.csv
 *.pkl
+*.log
 gmail_config.yml
 .envrc
+.python-version
 environment.yml
+venv
 !sample_data_2024.csv
 
