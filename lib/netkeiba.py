@@ -244,7 +244,8 @@ class Netkeiba:
                            else route.continue_()
                            )
             page.goto('https://race.netkeiba.com/top/race_list.html',
-                      timeout=self.timeout)
+                      timeout=self.timeout,
+                      wait_until="domcontentloaded")
 
             if html_save_path:
                 with open(html_save_path, "w") as f:
