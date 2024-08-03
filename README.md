@@ -99,7 +99,7 @@ $ python task_update_horse_prizes.py
 - result\.sh
     - task\_notify\_result\.py
 
-Also you can register cron jobs to run these batch scripts automatically.
+Also you can register cron jobs to run these batch scripts periodically.
 ```
 $ cp cronjobs.sample.txt cronjobs.txt  # and EDIT it
 $ ./install_cronjobs.sh
