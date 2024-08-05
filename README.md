@@ -86,3 +86,22 @@ $ python task_update_horse_names.py
 $ python task_update_horse_prizes.py
 ```
 
+### Batch processing
+
+3 shell scripts are provided.
+
+- update\.sh
+    - task\_update\_horse\_names\.py
+    - task\_update\_horse\_prizes\.py
+    - task\_notify\_ranking\.py
+- shutuba\.sh
+    - task\_notify\_shutuba\.py
+- result\.sh
+    - task\_notify\_result\.py
+
+Also you can register cron jobs to run these batch scripts periodically.
+```
+$ cp cronjobs.sample.txt cronjobs.txt  # and EDIT it
+$ ./install_cronjobs.sh
+```
+
