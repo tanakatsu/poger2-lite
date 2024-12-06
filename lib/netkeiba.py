@@ -69,6 +69,9 @@ class Netkeiba:
 
     def get_all_shutuba_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
+        date_from = date.today()
+        date_to = date_from + timedelta(days=6)
+        kaisai_list = self._filter_kaisai_urls(kaisai_list, date_from, date_to)
         print(kaisai_list)
 
         all_race_urls = []
@@ -88,6 +91,9 @@ class Netkeiba:
 
     def get_all_result_info(self) -> list[Race]:
         kaisai_list = self._get_kaisai_list()
+        date_to = date.today()
+        date_from = date_to + timedelta(days=-6)
+        kaisai_list = self._filter_kaisai_urls(kaisai_list, date_from, date_to)
         print(kaisai_list)
 
         all_race_urls = []
@@ -263,9 +269,7 @@ class Netkeiba:
             browser.close()
         return kaisai_urls
 
-    def _filter_kaisai_urls(self, urls: list[str], date_from: date, date_to: date | None) -> list[str]:
-        if date_to is None:
-            date_to = date_from + timedelta(year=1)
+    def _filter_kaisai_urls(self, urls: list[str], date_from: date, date_to: date) -> list[str]:
         from_as_number = int(str(date_from).replace("-", ""))
         to_as_number = int(str(date_to).replace("-", ""))
 
