@@ -356,6 +356,8 @@ class Netkeiba:
 
             loc_horses = page.locator("tr.HorseList")
             for i in range(loc_horses.count()):
+                if not loc_horses.nth(i).locator("span.HorseName").is_visible():
+                    continue
                 horse_name = loc_horses.nth(i).locator("span.HorseName").text_content().strip()
                 url = loc_horses.nth(i).locator("span.HorseName > a").get_attribute("href")
                 horse_id = int(url.split("/")[-1])
